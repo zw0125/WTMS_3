@@ -1,9 +1,10 @@
 class Worker {
   final int id;
-  final String fullName;
   final String email;
-  final String? phone;
-  final String? address;
+  String fullName;
+  String? phone;
+  String? address;
+  String? profileImage;
 
   Worker({
     required this.id,
@@ -11,6 +12,7 @@ class Worker {
     required this.email,
     this.phone,
     this.address,
+    this.profileImage,
   });
 
   factory Worker.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Worker {
       email: json['email'] ?? '',
       phone: json['phone'],
       address: json['address'],
+      profileImage: json['profile_image'], // Add this line
     );
   }
 
@@ -30,6 +33,7 @@ class Worker {
       'email': email,
       'phone': phone,
       'address': address,
+      'profile_image': profileImage, // Add this line
     };
   }
 }

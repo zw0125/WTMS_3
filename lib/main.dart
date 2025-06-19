@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wtms/model/workers.dart';
 import 'package:wtms/screens/login_screen.dart';
-import 'package:wtms/screens/profile_screen.dart';
+import 'package:wtms/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,8 +68,7 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
-      home:
-          worker != null ? ProfileScreen(worker: worker!) : const LoginScreen(),
+      home: worker != null ? MainScreen(worker: worker!) : const LoginScreen(),
     );
   }
 }

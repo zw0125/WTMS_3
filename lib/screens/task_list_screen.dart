@@ -41,10 +41,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
         final data = json.decode(response.body);
         if (data['success']) {
           setState(() {
-            _works =
-                (data['works'] as List)
-                    .map((work) => Work.fromJson(work))
-                    .toList();
+            _works = (data['works'] as List)
+                .map((work) => Work.fromJson(work))
+                .toList();
             _isLoading = false;
           });
           print('Loaded ${_works.length} works'); // Debug print
@@ -65,74 +64,171 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Tasks')),
-      body:
-          _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : _works.isEmpty
-              ? const Center(child: Text('No tasks assigned'))
+      appBar: AppBar(
+        title: Row(
+          children: const [
+            Icon(Icons.assignment),
+            SizedBox(width: 8),
+            Text('My Tasks'),
+          ],
+        ),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _works.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.assignment_outlined,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No tasks assigned',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               : ListView.builder(
-                itemCount: _works.length,
-                itemBuilder: (context, index) {
-                  final work = _works[index];
-                  return Card(
-                    margin: const EdgeInsets.all(8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            work.title,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(work.description),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Due: ${work.dueDate.toString().split(' ')[0]}',
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                              Chip(
-                                label: Text(work.status),
-                                backgroundColor:
+                  itemCount: _works.length,
+                  itemBuilder: (context, index) {
+                    final work = _works[index];
+                    return Card(
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  work.status == 'completed'
+                                      ? Icons.check_circle
+                                      : Icons.pending,
+                                  color: work.status == 'completed'
+                                      ? Colors.green
+                                      : Colors.orange,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    work.title,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.description, size: 16),
+                                const SizedBox(width: 8),
+                                Expanded(child: Text(work.description)),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                          size: 16,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          'Due: ${work.dueDate.toString().split(' ')[0]}',
+                                          style: const TextStyle(
+                                              color: Colors.red),
+                                        ),
+                                      ],
+                                    ),
+                                    if (work.status == 'completed' &&
+                                        work.completionDate != null)
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.check_circle,
+                                            size: 16,
+                                            color: Colors.green,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            'Completed: ${work.completionDate.toString().split(' ')[0]}',
+                                            style: const TextStyle(
+                                                color: Colors.green),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                                Chip(
+                                  avatar: Icon(
                                     work.status == 'completed'
-                                        ? Colors.green[100]
-                                        : Colors.orange[100],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          if (work.status != 'completed')
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => SubmitWorkScreen(
+                                        ? Icons.check_circle
+                                        : Icons.access_time,
+                                    size: 16,
+                                    color: work.status == 'completed'
+                                        ? Colors.green
+                                        : Colors.orange,
+                                  ),
+                                  label: Text(work.status),
+                                  backgroundColor: work.status == 'completed'
+                                      ? Colors.green[100]
+                                      : Colors.orange[100],
+                                ),
+                              ],
+                            ),
+                            if (work.status != 'completed')
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    icon: const Icon(Icons.upload_file),
+                                    label: const Text('Submit Work'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SubmitWorkScreen(
                                             work: work,
                                             worker: widget.worker,
                                           ),
-                                    ),
-                                  ).then(
-                                    (_) => _loadWorks(),
-                                  ); // Refresh after submission
-                                },
-                                child: const Text('Submit Work'),
+                                        ),
+                                      ).then((result) {
+                                        // Only refresh and pop if work was actually submitted
+                                        if (result == true) {
+                                          _loadWorks();
+                                          Navigator.of(context)
+                                              .pop({'refresh': true});
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
     );
   }
 }

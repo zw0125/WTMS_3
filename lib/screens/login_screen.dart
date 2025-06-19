@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wtms/model/workers.dart';
-import 'package:wtms/screens/profile_screen.dart';
 import 'package:wtms/myconfig.dart';
+import 'package:wtms/screens/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -177,8 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder:
-                                      (context) =>
-                                          ProfileScreen(worker: worker),
+                                      (context) => MainScreen(worker: worker),
                                 ),
                               );
                             }

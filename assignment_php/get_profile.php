@@ -9,28 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $worker_id = $_POST['worker_id'];
         
         try {
-            $sql = "SELECT * FROM tbl_works WHERE assigned_to = ? ORDER BY due_date ASC";
+            $sql = "SELECT id, full_name, email, phone, address FROM workers WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $worker_id);
             $stmt->execute();
             $result = $stmt->get_result();
             
-            $works = array();
-            while ($row = $result->fetch_assoc()) {
-                $works[] = array(
-                    'id' => $row['id'],
-                    'title' => $row['title'],
-                    'description' => $row['description'],
-                    'assigned_to' => $row['assigned_to'],
-                    'date_assigned' => $row['date_assigned'],
-                    'due_date' => $row['due_date'],
-                    'status' => $row['status'],
-                    'completion_date' => $row['completion_date']
-                );
+            if ($result->num_rows === 1) {
+                $worker = $result->fetch_assoc();
+                $response['success'] = true;
+                $response['worker'] = $worker;
+            } else {
+                throw new Exception('Worker not found');
             }
-            
-            $response['success'] = true;
-            $response['works'] = $works;
             
         } catch (Exception $e) {
             $response['success'] = false;

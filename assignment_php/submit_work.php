@@ -36,9 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             
             // Update work status
-            $update_sql = "UPDATE tbl_works SET status = 'completed' WHERE id = ?";
+            $completion_date = date('Y-m-d H:i:s'); // Get current datetime
+            $update_sql = "UPDATE tbl_works SET status = 'completed', completion_date = ? WHERE id = ?";
             $update_stmt = $conn->prepare($update_sql);
-            $update_stmt->bind_param("i", $work_id);
+            $update_stmt->bind_param("si", $completion_date, $work_id);
             
             if (!$update_stmt->execute()) {
                 throw new Exception('Failed to update work status');
