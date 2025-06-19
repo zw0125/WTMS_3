@@ -44,7 +44,7 @@ WTMS is a Flutter-based mobile application designed for workers to register, log
 - `tbl_works` – Stores tasks assigned to workers
 - `tbl_submissions` – Stores worker submission reports
 
-### Author
+### 🧑‍💻 Author
 - Ng Zi Wei
 - STIWK2114 Mobile Programming Assignment
 - Submission Date: 20 June 2025
