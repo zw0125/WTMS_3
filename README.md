@@ -1,4 +1,4 @@
-# 🛠️ Worker Task Management System (WTMS)
+# 🛠️ Worker Task Management System (WTMS) Phase 3
 
 WTMS is a Flutter-based mobile application designed for workers to register, log in, view assigned tasks, submit work reports, and manage their profiles. It features an intuitive UI, smooth navigation, and secure communication with a PHP-MySQL backend API.
 
@@ -46,5 +46,5 @@ WTMS is a Flutter-based mobile application designed for workers to register, log
 
 ### 🧑‍💻 Author
 - Ng Zi Wei
-- STIWK2114 Mobile Programming Assignment
+- STIWK2114 Mobile Programming Final Assignment
 - Submission Date: 20 June 2025
