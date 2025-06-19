@@ -211,13 +211,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                             worker: widget.worker,
                                           ),
                                         ),
-                                      ).then((result) {
-                                        // Only refresh and pop if work was actually submitted
-                                        if (result == true) {
-                                          _loadWorks();
-                                          Navigator.of(context)
-                                              .pop({'refresh': true});
-                                        }
+                                      ).then((_) {
+                                        // Refresh the work list after returning from submit screen
+                                        _loadWorks();
                                       });
                                     },
                                   ),
